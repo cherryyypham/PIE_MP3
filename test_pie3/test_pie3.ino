@@ -29,28 +29,42 @@ void loop() {
   // read the value from the sensor:
   sensorValueLeft = analogRead(sensorPinLeft);
   sensorValueRight = analogRead(sensorPinRight);
-  delay(500);
   Serial.println(sensorValueLeft);
   Serial.println(sensorValueRight);
   // On: 900 sth
   // Off: 700 sth
-  
-  if (sensorValueLeft < 850) {    //Off tape
-    if (sensorValueRight >= 850) {  //On tape
-      Serial.println("Turn left wheel, right wheel stationary");
-      leftMotor->setSpeed(100);
-      rightMotor->setSpeed(0);
-    }
-    else {
+//  
+//  if (sensorValueLeft < 850) {    //Off tape
+//    if (sensorValueRight >= 850) {  //On tape
+//      Serial.println("Turn left wheel, right wheel stationary");
+//      leftMotor->setSpeed(25);
+//      rightMotor->setSpeed(0);
+//    }
+//    else {
+//      Serial.println("Turn right wheel, left wheel stationary");
+//      leftMotor->setSpeed(0);
+//      rightMotor->setSpeed(30);
+//    }
+//  }
+//  else {
+//    Serial.println("Go straight");
+//    leftMotor->setSpeed(25);
+//    rightMotor->setSpeed(25);
+//  }
+  if (sensorValueLeft >= 850) {
       Serial.println("Turn right wheel, left wheel stationary");
       leftMotor->setSpeed(0);
-      rightMotor->setSpeed(100);
-    }
+      rightMotor->setSpeed(40);
+  }
+  else if (sensorValueRight >= 850) {
+      Serial.println("Turn left wheel, right wheel stationary");
+      leftMotor->setSpeed(40);
+      rightMotor->setSpeed(0);
   }
   else {
     Serial.println("Go straight");
-    leftMotor->setSpeed(100);
-    rightMotor->setSpeed(100);
+    leftMotor->setSpeed(20);
+    rightMotor->setSpeed(20);
   }
   
   
