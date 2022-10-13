@@ -34,38 +34,15 @@ void loop() {
   // On: 900 sth
   // Off: 700 sth
 
-//  if (sensorValueLeft < 850 and sensorValueRight >= 850){
-//      Serial.println("GO STRAIGHT");
-//      leftMotor->setSpeed(20);
-//      rightMotor->setSpeed(20);
-//  }
-//  else if (sensorValueRight < 850 and sensorValueLeft >= 850) {
-//      Serial.println("TURN RIGHT");
-//      leftMotor->setSpeed(25);
-//      rightMotor->setSpeed(0);
-//  }
-//  // Both off
-//  else if (sensorValueRight < 850 and sensorValueLeft < 850) {
-//      Serial.println("TURN RIGHT");
-//      leftMotor->setSpeed(25);
-//      rightMotor->setSpeed(0);
-//  }
-
-//  else {
-//    Serial.println("TURN LEFT");
-//    leftMotor->setSpeed(0);
-//    rightMotor->setSpeed(25);
-//  }
-
   if (sensorValueLeft >= 850) {
     
       Serial.println("Turn right wheel, left wheel stationary");
-      leftMotor->setSpeed(0);
-      rightMotor->setSpeed(40);
+      leftMotor->setSpeed(10);
+      rightMotor->setSpeed(50);
   }
   else if (sensorValueRight >= 850) {
-      leftMotor->setSpeed(40);
-      rightMotor->setSpeed(0);
+      leftMotor->setSpeed(50);
+      rightMotor->setSpeed(10);
   }
   else if (sensorValueLeft >= 850 and sensorValueRight >= 850) {
 
@@ -74,10 +51,4 @@ void loop() {
     rightMotor->setSpeed(0);
     delay(100);
   }
-  else {
-    Serial.println("Go straight");
-    leftMotor->setSpeed(25);
-    rightMotor->setSpeed(25);
-  }
-  
 }
