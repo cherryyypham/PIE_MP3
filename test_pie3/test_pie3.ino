@@ -33,39 +33,53 @@ void loop() {
   Serial.println(sensorValueRight);
   // On: 900 sth
   // Off: 700 sth
-//  
-//  if (sensorValueLeft < 850) {    //Off tape
-//    if (sensorValueRight >= 850) {  //On tape
-//      Serial.println("Turn left wheel, right wheel stationary");
+
+//  if (sensorValueLeft < 850 and sensorValueRight >= 850){
+//      Serial.println("GO STRAIGHT");
+//      leftMotor->setSpeed(20);
+//      rightMotor->setSpeed(20);
+//  }
+//  else if (sensorValueRight < 850 and sensorValueLeft >= 850) {
+//      Serial.println("TURN RIGHT");
 //      leftMotor->setSpeed(25);
 //      rightMotor->setSpeed(0);
-//    }
-//    else {
-//      Serial.println("Turn right wheel, left wheel stationary");
-//      leftMotor->setSpeed(0);
-//      rightMotor->setSpeed(30);
-//    }
+//  }
+//  // Both off
+//  else if (sensorValueRight < 850 and sensorValueLeft < 850) {
+//      Serial.println("TURN RIGHT");
+//      leftMotor->setSpeed(25);
+//      rightMotor->setSpeed(0);
 //  }
 //  else {
-//    Serial.println("Go straight");
-//    leftMotor->setSpeed(25);
+//    Serial.println("TURN LEFT");
+//    leftMotor->setSpeed(0);
 //    rightMotor->setSpeed(25);
 //  }
-  if (sensorValueLeft >= 850) {
-      Serial.println("Turn right wheel, left wheel stationary");
-      leftMotor->setSpeed(0);
-      rightMotor->setSpeed(40);
+  // Both sensor sensing
+  if (sensorValueLeft >= 850 and sensorValueRight >= 850) {
+
+    Serial.println("Sharp turnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn");
+    leftMotor->setSpeed(100);
+    rightMotor->setSpeed(0);
+    delay(300);
   }
+  // Right sensor sensing, left sensor not sensing
   else if (sensorValueRight >= 850) {
       Serial.println("Turn left wheel, right wheel stationary");
-      leftMotor->setSpeed(40);
+      leftMotor->setSpeed(80);
       rightMotor->setSpeed(0);
   }
+  // Centered on left sensor, right sensor not sensing
+  else if (sensorValueLeft >= 850) {
+      Serial.println("Go straight");
+      leftMotor->setSpeed(25);
+      rightMotor->setSpeed(25);
+  } 
   else {
-    Serial.println("Go straight");
-    leftMotor->setSpeed(20);
-    rightMotor->setSpeed(20);
+    // Both off line
+    Serial.println("Turn left");
+    leftMotor->setSpeed(0);
+    rightMotor->setSpeed(40);
   }
-  
   
 }
