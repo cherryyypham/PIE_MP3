@@ -50,36 +50,34 @@ void loop() {
 //      leftMotor->setSpeed(25);
 //      rightMotor->setSpeed(0);
 //  }
+
 //  else {
 //    Serial.println("TURN LEFT");
 //    leftMotor->setSpeed(0);
 //    rightMotor->setSpeed(25);
 //  }
-  // Both sensor sensing
-  if (sensorValueLeft >= 850 and sensorValueRight >= 850) {
 
-    Serial.println("Sharp turnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn");
-    leftMotor->setSpeed(100);
-    rightMotor->setSpeed(0);
-    delay(300);
+  if (sensorValueLeft >= 850) {
+    
+      Serial.println("Turn right wheel, left wheel stationary");
+      leftMotor->setSpeed(0);
+      rightMotor->setSpeed(40);
   }
-  // Right sensor sensing, left sensor not sensing
   else if (sensorValueRight >= 850) {
-      Serial.println("Turn left wheel, right wheel stationary");
-      leftMotor->setSpeed(80);
+      leftMotor->setSpeed(40);
       rightMotor->setSpeed(0);
   }
-  // Centered on left sensor, right sensor not sensing
-  else if (sensorValueLeft >= 850) {
-      Serial.println("Go straight");
-      leftMotor->setSpeed(25);
-      rightMotor->setSpeed(25);
-  } 
+  else if (sensorValueLeft >= 850 and sensorValueRight >= 850) {
+
+    Serial.println("Sharp turnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn1");
+    leftMotor->setSpeed(250);
+    rightMotor->setSpeed(0);
+    delay(100);
+  }
   else {
-    // Both off line
-    Serial.println("Turn left");
-    leftMotor->setSpeed(0);
-    rightMotor->setSpeed(40);
+    Serial.println("Go straight");
+    leftMotor->setSpeed(25);
+    rightMotor->setSpeed(25);
   }
   
 }
