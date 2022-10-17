@@ -23,6 +23,7 @@ void setup() {
   rightMotor->setSpeed(0);
   
   Serial.begin(9600);
+  Serial.setTimeout(1);
 }
 
 void loop() {
@@ -33,9 +34,8 @@ void loop() {
   Serial.println(sensorValueRight);
   // On: 900 sth
   // Off: 700 sth
-
+  
   if (sensorValueLeft >= 850) {
-    
       Serial.println("Turn right wheel, left wheel stationary");
       leftMotor->setSpeed(10);
       rightMotor->setSpeed(50);
@@ -50,5 +50,16 @@ void loop() {
     leftMotor->setSpeed(250);
     rightMotor->setSpeed(0);
     delay(100);
+  }
+  if (Serial.available() > 0) {
+    input = Serial.readString().toInt();
+    //leftMotor: 7xxx
+    //rightMotor: 8xxx
+    if (input / 1000 = 7) {
+      leftMotor->setSpeed(input%1000);
+    }
+    if (input / 1000 = 8) {
+      rightMotor->setSpeed(input%1000);
+    }
   }
 }
