@@ -1,121 +1,94 @@
-//#include <Wire.h>
+
+/**
+   PIE-S2 Project 3
+   Name: DC Motor Control
+   Purpose: Control a robot using inputs from 2 IR reflectance sensors and outputting to 2 DC motors
+   @author Miranda Pietraski, Cherry Pham, and Vaani Bhatnagar
+   @version 1.0 10/06/2022
+*/
+
 #include <Adafruit_MotorShield.h>
 
 // Naming the Adafruit Motor Shield as AFMS
 Adafruit_MotorShield AFMS = Adafruit_MotorShield(); 
 
-Adafruit_DCMotor *leftMotor = AFMS.getMotor(1);   // initiating left motor
-Adafruit_DCMotor *rightMotor = AFMS.getMotor(2);  // inititating right motor
+// Initiating left and right motors
+Adafruit_DCMotor *leftMotor = AFMS.getMotor(1);
+Adafruit_DCMotor *rightMotor = AFMS.getMotor(2);
 
-int sensorPinLeft = A1;   // select the input pin for the IR sensor on the left
-int sensorPinRight = A0;  // select the input pin for the IR sensor on the right
 
-int sensorValueLeft = 0;  // variable to store the value coming from the sensor
-int sensorValueRight = 0;  // variable to store the value coming from the sensor
+// Selecting input pins for the IR sensor on the left and right
+int sensorPinLeft = A1;   
+int sensorPinRight = A0;
 
-String input;       // variable to store input from .py file
+// Initializing variables to store values coming from the sensors
+int sensorValueLeft = 0;
+int sensorValueRight = 0;
 
+// Initializing variable to store input from .py file
+String input;
+
+// Setup function that run once
 void setup() {
-  // initiating sensors
+  // Initiating sensors as inputs
   pinMode(sensorPinLeft, INPUT);
   pinMode(sensorPinRight, INPUT);
 
-  // initiating motorshield
+  // Initiating motorshield
   AFMS.begin();           
 
-  // initial motor set-ups
+  // Initial motor set-ups
   leftMotor->run(FORWARD);
   leftMotor->setSpeed(0);
   rightMotor->run(FORWARD);
   rightMotor->setSpeed(0);
 
-  // begin serial - matching the serial number declared in python file
+  // Begin serial - matching the serial number declared in .py file
   Serial.begin(9600);
 }
 
+// Loop through taking inputs from sensors and parsing resultance outputs to DC motors
 void loop() {
-  // read the value from the sensor:
+  // Read sensors' values:
   sensorValueLeft = analogRead(sensorPinLeft);
   sensorValueRight = analogRead(sensorPinRight);
-
-  // print out sensor values - crucial to test if sensors are reading
-  // because our sensors' connection is bad
-//  Serial.println(sensorValueLeft);
-//  Serial.println(sensorValueRight);
-  // On: 900 sth
-  // Off: 700 sth
-  
+  // Speed changing through terminal interface
+  // If receive signals from terminal through .py file
   if (Serial.available() > 0) {
+    // Read until the end of a line
     input = Serial.readStringUntil('\n');
-    Serial.write("RECEIVED");
-    leftMotor->setSpeed(30);
-    rightMotor->setSpeed(30);
-    if (input == "n") {
-      if (sensorValueRight >= 850) {
-//          Serial.println("Turn left wheel, right wheel stationary");
-          Serial.write("RIGHT");
-          leftMotor->setSpeed(50);
-          rightMotor->setSpeed(10);
-      }
-      else if (sensorValueLeft >= 850) {
-//          Serial.println("Turn right wheel, left wheel stationary");
-          Serial.write("LEFT");
-          leftMotor->setSpeed(10);
-          rightMotor->setSpeed(50);
-      }
-      
+
+    // Left motor speed: 7xxx
+    if (input.charAt(0)== '7') {
+      // Take only speed data
+      input = input.substring(1,4).toInt();
+      // Adjust left motor's speed accordingly
+      leftMotor->setSpeed(input.toInt());  
     }
-    if (input == "s") {
-      leftMotor->setSpeed(0);
-      rightMotor->setSpeed(0);      
+    // Right motor speed: 8xxx
+    if (input.charAt(0) == '8') {
+      // Take only speed data
+      input = input.substring(1,4).toInt();
+      // Adjust right motor's speed accordingly
+      rightMotor->setSpeed(input.toInt());
     }
-//
-//
-//    if (input == "r") {
-//      if (sensorValueLeft >= 850) {
-////        Serial.println("Turn right wheel, left wheel stationary");
-//        leftMotor->setSpeed(0);
-//        rightMotor->setSpeed(40);
-//      }
-//      else if (sensorValueRight >= 850) {
-//          leftMotor->setSpeed(40);
-//          rightMotor->setSpeed(0);
-//      }
-//      else if (sensorValueLeft >= 850 and sensorValueRight >= 850) {
-//    
-////        Serial.println("Sharp turnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn1");
-//        leftMotor->setSpeed(250);
-//        rightMotor->setSpeed(0);
-//        delay(100);
-//      }
-//      else {
-////        Serial.println("Go straight");
-//        leftMotor->setSpeed(25);
-//        rightMotor->setSpeed(25);
-//      }
-//    if (input.charAt(0)== '7') {
-//      input = input.substring(1,4).toInt();
-//      leftMotor->setSpeed(input.toInt());
-//      rightMotor->setSpeed(0);
-//      Serial.write("LEFT");
-//      
-//    }
-//    if (input.charAt(0) == '8') {
-//      input = input.substring(1,4).toInt();
-//      rightMotor->setSpeed(input.toInt());
-//      leftMotor->setSpeed(0);
-//      Serial.write("RIGHT");
-//    }
-//    } 
   }
-//        if (sensorValueRight >= 850) {
-////          Serial.println("Turn left wheel, right wheel stationary");
-//          leftMotor->setSpeed(50);
-//          rightMotor->setSpeed(10);
-//      }
-//      else if (sensorValueLeft >= 850) {
-////          Serial.println("Turn right wheel, left wheel stationary");
-//          leftMotor->setSpeed(10);
-//          rightMotor->setSpeed(50);
-//      }
+  // If receive no signal from terminal, proceed to default behavior
+  else {
+    // On: ~900
+    // Off: ~700
+
+    // sensor on the right detects the tape
+    // turn left wheel, right wheel stationary
+    if (sensorValueRight >= 850) {
+      leftMotor->setSpeed(50);
+      rightMotor->setSpeed(10);
+    }
+    // sensor on the left detects the tape
+    // turn right wheel, left wheel stationary
+    if (sensorValueLeft >= 850) {
+      leftMotor->setSpeed(10);
+      rightMotor->setSpeed(50);
+    }
+  }
 }
