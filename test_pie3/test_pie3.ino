@@ -4,7 +4,7 @@
    Name: DC Motor Control
    Purpose: Control a robot using inputs from 2 IR reflectance sensors and outputting to 2 DC motors
    @author Miranda Pietraski, Cherry Pham, and Vaani Bhatnagar
-   @version 1.0 10/06/2022
+   @version 1.0 10/19/2022
 */
 
 #include <Adafruit_MotorShield.h>
